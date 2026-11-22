@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% block title %}Analyze transaction | SentinelGuard{% endblock %}
+{% block content %}
+<div class="page-heading"><p class="eyebrow">MACHINE LEARNING ANALYSIS</p><h1>Analyze a transaction</h1><p class="muted">Enter the transaction signals below to estimate its fraud probability.</p></div>
+<div class="form-layout"><form method="post" class="panel form-panel">
+<div class="form-grid">
+<label>Transaction amount (₹)<input name="amount" type="number" min="1" max="10000000" step="0.01" value="2500" required></label>
+<label>Transaction hour (0–23)<input name="hour" type="number" min="0" max="23" value="14" required></label>
+<label>Distance from usual location (km)<input name="distance_from_home_km" type="number" min="0" max="20000" step="0.1" value="5" required></label>
+<label>Failed attempts in last 24 hours<input name="failed_attempts_24h" type="number" min="0" max="50" value="0" required></label>
+<label>Transactions in last hour<input name="txns_last_hour" type="number" min="0" max="100" value="1" required></label>
+<label>Merchant risk (0 to 1)<input name="merchant_risk" type="number" min="0" max="1" step="0.01" value="0.2" required></label>
+<label>New device<select name="is_new_device"><option value="0">No</option><option value="1">Yes</option></select></label>
+<label>International transaction<select name="is_international"><option value="0">No</option><option value="1">Yes</option></select></label>
+</div><button class="btn full" type="submit">Run fraud analysis</button>
+<p class="tiny muted">Use synthetic/test data only. The model is a classroom demonstration, not a bank-grade fraud engine.</p>
+</form>
+{% if result %}<section class="panel result-panel"><p class="eyebrow">MODEL RESULT</p><span class="tag {{ 'danger' if result.prediction == 'Fraud' else 'safe' }}">{{ result.prediction }}</span>
+<div class="risk-number">{{ result.risk_score }}<small>/100</small></div><h2 class="{{ 'red' if result.risk_level == 'High' else 'green' }}">{{ result.risk_level }} risk</h2>
+<p class="muted">Estimated fraud probability: {{ (result.fraud_probability * 100)|round(2) }}%</p>
+<div class="meter"><span style="width:{{ result.risk_score }}%"></span></div>
+<h3>Important model inputs</h3><ul>{% for reason in result.explanation %}<li>{{ reason }}</li>{% endfor %}</ul>
+<p class="tiny muted">These are model-relevant signals, not proof of fraud or a causal explanation.</p></section>{% else %}<section class="panel result-placeholder"><div class="placeholder-icon">◎</div><h2>Awaiting transaction</h2><p class="muted">Your prediction and risk summary will appear here.</p></section>{% endif %}
+</div>{% endblock %}

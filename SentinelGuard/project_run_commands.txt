@@ -1,0 +1,11 @@
+Start the backend:
+
+uvicorn backend.main:app --reload
+
+
+
+
+
+Open another terminal and start the frontend:
+
+streamlit run frontend/app.py

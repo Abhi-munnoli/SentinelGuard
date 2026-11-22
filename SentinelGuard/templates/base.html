@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}SentinelGuard{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head><body>
+<header class="topbar"><a class="brand" href="{{ url_for('dashboard') }}"><span class="brand-icon">S</span> SentinelGuard</a>
+<nav><a href="{{ url_for('dashboard') }}">Dashboard</a><a href="{{ url_for('predict') }}">Analyze transaction</a><a href="{{ url_for('transactions') }}">History</a></nav>
+<span class="env">FRAUD INTELLIGENCE</span></header>
+<main class="container">
+{% with messages = get_flashed_messages(with_categories=true) %}{% for category, message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
+{% block content %}{% endblock %}
+<footer>SentinelGuard · Educational demonstration · Not for real banking decisions</footer>
+</main><script src="{{ url_for('static', filename='js/app.js') }}"></script></body></html>

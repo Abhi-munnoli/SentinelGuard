@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block title %}Transaction history | SentinelGuard{% endblock %}
+{% block content %}
+<div class="page-heading"><p class="eyebrow">AUDIT TRAIL</p><h1>Transaction history</h1><p class="muted">Latest 100 locally stored prediction records.</p></div>
+<section class="panel"><div class="table-wrap"><table><thead><tr><th>Timestamp</th><th>Amount</th><th>Prediction</th><th>Probability</th><th>Risk score</th><th>Risk level</th></tr></thead><tbody>
+{% for item in transactions %}<tr><td>{{ item.created_at[:19].replace("T"," ") }}</td><td>₹{{ "{:,.2f}".format(item.amount) }}</td><td><span class="tag {{ 'danger' if item.prediction == 'Fraud' else 'safe' }}">{{ item.prediction }}</span></td><td>{{ (item.fraud_probability * 100)|round(1) }}%</td><td>{{ item.risk_score }}/100</td><td>{{ item.risk_level }}</td></tr>{% else %}<tr><td colspan="6" class="muted">No transactions have been analyzed yet.</td></tr>{% endfor %}
+</tbody></table></div></section>{% endblock %}
